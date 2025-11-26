@@ -1,7 +1,4 @@
-# Affiliate-Auto-Publisher
-Automatically extracts affiliate products, formats content, and publishes posts using n8n automation
-# Affiliate Auto-Publisher
-
+# Affilliate-Auto-publisger 
 An automated affiliate marketing workflow built using **n8n**.  
 This system collects affiliate products daily, formats content automatically, and publishes posts to social platforms — creating a fully automated income stream.
 
