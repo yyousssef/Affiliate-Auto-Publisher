@@ -1,0 +1,167 @@
+{
+  "name": "Affiliate Auto-Publisher",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "659e5468-907d-4666-acd4-8d2cc56473d0",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -1008,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://YOUR_AFFILIATE_FEED_URL.com/rss",
+        "responseFormat": "xml",
+        "options": {}
+      },
+      "id": "761f68fa-d8fc-41f2-8b8c-31f3a653b220",
+      "name": "Fetch Affiliate Products",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "69c549ae-2982-4eda-84e5-3696495c0825",
+      "name": "RSS Parser",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "post_text",
+              "value": "🔥 منتج جديد 🔥\n\nالاسم: {{$json[\"item\"][0][\"title\"]}}\nالسعر: {{$json[\"item\"][0][\"price\"]}}\nالرابط: {{$json[\"item\"][0][\"link\"]}}"
+            },
+            {
+              "name": "image_url",
+              "value": "{{$json[\"item\"][0][\"image\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fa704eb2-824d-4047-ac2a-4bb66645a7f7",
+      "name": "Prepare Post Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "@YOUR_TELEGRAM_CHANNEL",
+        "text": "={{$json[\"post_text\"]}}",
+        "additionalFields": {}
+      },
+      "id": "7b3cd3cc-c731-43dc-9239-ef376a5c308e",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "92eec764-a4bf-4ab9-9101-e1a64963622d",
+      "credentials": {
+        "telegramApi": {
+          "id": null,
+          "name": "Telegram API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "180c633d-8be0-4d49-b6e3-ecb13d56e31a",
+      "name": "Send to Facebook Page",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        0,
+        224
+      ],
+      "credentials": {
+        "facebookGraphApi": {
+          "id": null,
+          "name": "Facebook Page Token"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Affiliate Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Affiliate Products": {
+      "main": [
+        [
+          {
+            "node": "RSS Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Parser": {
+      "main": [
+        [
+          {
+            "node": "Prepare Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Post Content": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6f83eecd-2338-4742-a393-69376bf2e335",
+  "meta": {
+    "instanceId": "2ddabfb1788364c84c554645ea0827de8b2e37490e53b974d7321dcfedcbb516"
+  },
+  "id": "dF9xt9da9UVXdqIM",
+  "tags": []
+}
